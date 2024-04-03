@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -28,7 +29,7 @@
 <body class="bg-main">
     <nav class="h-24 w-full bg-nav text-white flex">
         <div class="w-1/2 text-3xl font-semibold flex justify-start ml-10 my-6">
-            <h1>Homan-Trans - Laravel Homework</h1>
+            <h1><a href="{{ url('/') }}">Homan-Trans - Laravel Homework</a></h1>
         </div>
         <div class="w-1/2  flex justify-end mr-10 my-6">
             <button id="fetchDataButton" class="bg-button hover:bg-button-hover transition text-white font-bold py-2 px-4 border border-blue-700 rounded">Download Data</button>
@@ -43,6 +44,7 @@
         Töltés...
     </div>
 
+    <!-- Fetching data and upload to Database -->
     <script>
         document.getElementById('fetchDataButton').addEventListener('click', function() {
             document.getElementById('loader').style.display = 'block';
@@ -64,6 +66,18 @@
                 .finally(() => {
                     document.getElementById('loader').style.display = 'none';
             });;
+        });
+    </script>
+
+    <!-- Filter by Name -->
+    <script>
+        $(document).ready(function(){
+            $('#filterByName').on('input', function(){
+                var filterValue = $(this).val().toLowerCase();
+                $('tbody tr').filter(function(){
+                    $(this).toggle($(this).text().toLowerCase().indexOf(filterValue) > -1)
+                });
+            });
         });
     </script>
 </body>
