@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -13,6 +15,7 @@
                 colors: {
                     'nav': '#3B3B49',
                     'table-body': '#79798A',
+                    'table-body2': '#8F8F9F',
                     'table-body-hover': '#5050C9',
                     'main': '#9898A9',
                     'white': '#ffffff',
@@ -44,8 +47,8 @@
         Töltés...
     </div>
 
-    <!-- Fetching data and upload to Database -->
     <script>
+        // Fetching data and upload to Database
         document.getElementById('fetchDataButton').addEventListener('click', function() {
             document.getElementById('loader').style.display = 'block';
             
@@ -67,16 +70,101 @@
                     document.getElementById('loader').style.display = 'none';
             });;
         });
-    </script>
 
-    <!-- Filter by Name -->
-    <script>
+        // Filter by Name
         $(document).ready(function(){
             $('#filterByName').on('input', function(){
                 var filterValue = $(this).val().toLowerCase();
                 $('tbody tr').filter(function(){
                     $(this).toggle($(this).text().toLowerCase().indexOf(filterValue) > -1)
                 });
+            });
+        });
+
+        // Filter by Created date (From-To)
+        $(document).ready(function(){
+            $('#filterByCreatedFrom, #filterByCreatedTo').on('input', function(){
+                var fromValue = $('#filterByCreatedFrom').val();
+                var toValue = $('#filterByCreatedTo').val();
+
+                $('tbody tr').each(function(){
+                    var created = $(this).find('td:nth-child(6)').text().trim();
+
+                    if (fromValue && toValue) {
+                        var fromDate = new Date(fromValue);
+                        var toDate = new Date(toValue);
+                        var rowDate = new Date(created);
+
+                        $(this).toggle(rowDate >= fromDate && rowDate <= toDate);
+                    } else if (fromValue) {
+                        var fromDate = new Date(fromValue);
+                        var rowDate = new Date(created);
+
+                        $(this).toggle(rowDate >= fromDate);
+                    } else if (toValue) {
+                        var toDate = new Date(toValue);
+                        var rowDate = new Date(created);
+
+                        $(this).toggle(rowDate <= toDate);
+                    } else {
+                        $(this).show();
+                    }
+                });
+            });
+        });
+
+        // Show up Modal window for list episode characters
+        $(document).ready(function(){
+            $('tbody tr').on('click', function(){
+                var rowCounter = 1;
+                var episode = $(this).data('episode');
+                var characters = $(this).data('characters');
+                var characterData = `
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-nav text-white">
+                                <th>ID</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                characters.forEach(function(character){
+                    characterData += `
+                        <tr class=${rowCounter %2 == 0 ? "bg-table-body" : "bg-table-body2"}>
+                            <th class="text-black">${character.id}</th>
+                            <th class="text-black">${character.name}</th>
+                        </tr>
+                    `;
+
+                    rowCounter++;
+                });
+
+                characterData += `</tbody></table>`;
+
+                Swal.fire({
+                    title: "<strong>" + episode + "</strong> character list",
+                    icon: "info",
+                    html: `
+                        <div class="w-full">
+                            ${characterData}
+                        </div>
+                    `,
+                    showCloseButton: true,
+                    showCancelButton: false,
+                    focusConfirm: false,
+                    confirmButtonText: `
+                        <i class="fa fa-thumbs-up"></i> OK!
+                    `,
+                    confirmButtonAriaLabel: "Confirm!",
+                    cancelButtonText: `
+                        <i class="fa fa-thumbs-down"></i>
+                    `,
+                    cancelButtonAriaLabel: "Thumbs down"
+                });
+
+
             });
         });
     </script>
