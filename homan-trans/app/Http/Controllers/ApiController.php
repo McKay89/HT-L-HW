@@ -6,8 +6,7 @@ use App\Models\Episode;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 
-class ApiController extends Controller
-{
+class ApiController extends Controller {
     private static $uploadInProgress = false;
 
     public function index(){
@@ -69,5 +68,10 @@ class ApiController extends Controller
         }
 
         return $success;
+    }
+
+    public function sortedEpisodes($column, $direction) {
+        $episodes = Episode::orderBy($column, $direction)->paginate(7);
+        return view('main', compact('episodes'));
     }
 }
