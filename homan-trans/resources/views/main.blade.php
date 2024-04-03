@@ -30,13 +30,13 @@
             </thead>
             <tbody>
                 @foreach ($episodes as $episode)
-                    <tr class="bg-table-body cursor-pointer hover:bg-table-body-hover text-lg hover:text-white transition text-center font-bold">
+                    <tr class="bg-table-body cursor-pointer hover:bg-table-body-hover text-lg hover:text-white transition text-center font-bold" data-characters="{{ $episode->ep_characters }}" data-episode="{{ $episode->ep_name }}">
                         <td>{{ $episode->ep_id }}</td>
                         <td>{{ $episode->ep_name }}</td>
                         <td>{{ $episode->ep_episode }}</td>
                         <td>{{ $episode->ep_url }}</td>
                         <td>{{ $episode->ep_air_date }}</td>
-                        <td>{{ $episode->ep_created }}</td>
+                        <td>{{ date('Y-m-d H:i:s', strtotime($episode->ep_created)) }}</td>
                     </tr>
                 @endforeach
             </tbody>
