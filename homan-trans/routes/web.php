@@ -7,7 +7,6 @@ use App\Http\Controllers\ApiController;
 // Root route
 Route::get('/', function () {
     return view('main', [
-        'heading' => 'Rick & Morty Episodes',
         'episodes' => Episode::paginate(7)
     ]);
 });
