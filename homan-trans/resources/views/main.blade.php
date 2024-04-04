@@ -1,6 +1,8 @@
 @extends('layout')
 
 @section('main')
+@include('partials._nav')
+@include('partials._loader')
 
 @unless(count($episodes) == 0)
     <div class="w-full flex justify-center mt-9">
