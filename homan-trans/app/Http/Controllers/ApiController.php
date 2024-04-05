@@ -44,7 +44,7 @@ class ApiController extends Controller {
                 $episode = new Episode();
                 $episode->ep_id = $episodeData['id'];
                 $episode->ep_name = $episodeData['name'];
-                $episode->ep_air_date = $episodeData['air_date'];
+                $episode->ep_air_date = date('Y-m-d', strtotime($episodeData['air_date']));
                 $episode->ep_episode = $episodeData['episode'];
                 
                 $characters = [];
@@ -61,17 +61,12 @@ class ApiController extends Controller {
                 $episode->ep_characters = json_encode($characters);
                 
                 $episode->ep_url = $episodeData['url'];
-                $episode->ep_created = $episodeData['created'];
+                $episode->ep_created = date('Y-m-d H:i:s', strtotime($episodeData['created']));
                 $episode->save();
                 $success = true;
             }
         }
 
         return $success;
-    }
-
-    public function sortedEpisodes($column, $direction) {
-        $episodes = Episode::orderBy($column, $direction)->paginate(7);
-        return view('main', compact('episodes'));
     }
 }
