@@ -59,8 +59,129 @@
                 })
                 .finally(() => {
                     document.getElementById('loader').style.display = 'none';
-            });;
+            });
         });
+
+        $(document).ready(function(){
+            // Filter by episode name
+            $('#filterByNameSubmit').on('click',function(){
+                var filterValue = $('#filterByNameInput').val().toLowerCase();
+                var filterType = "name";
+
+                $.ajax({
+                    url: '{{ route("filtered-episodes") }}',
+                    method: 'GET',
+                    data: {
+                        filterType: filterType,
+                        filterValue: filterValue
+                    },
+                    success: function(response) {
+                        window.location.href = '{{ route("filtered-episodes") }}?filterType=' + filterType + '&filterValue=' + filterValue;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            // Filter by created date
+            $('#filterByCreatedDateSubmit').on('click',function(){
+                var filterValueFrom = $('#filterByCreatedFromInput').val().toLowerCase();
+                var filterValueTo = $('#filterByCreatedToInput').val().toLowerCase();
+                var filterType = "created";
+
+                $.ajax({
+                    url: '{{ route("filtered-episodes") }}',
+                    method: 'GET',
+                    data: { 
+                        filterType: filterType,
+                        filterValueFrom: filterValueFrom,
+                        filterValueTo: filterValueTo
+                    },
+                    success: function(response) {
+                        window.location.href = '{{ route("filtered-episodes") }}?filterType=' + filterType + '&filterValueFrom=' + filterValueFrom + '&filterValueTo=' + filterValueTo;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            // Filter by air date
+            $('#filterByAirDateSubmit').on('click',function(){
+                var filterValueFrom = $('#filterByAirFromInput').val();
+                var filterValueTo = $('#filterByAirToInput').val();
+                var filterType = "air";
+
+                $.ajax({
+                    url: '{{ route("filtered-episodes") }}',
+                    method: 'GET',
+                    data: { 
+                        filterType: filterType,
+                        filterValueFrom: filterValueFrom,
+                        filterValueTo: filterValueTo
+                    },
+                    success: function(response) {
+                        window.location.href = '{{ route("filtered-episodes") }}?filterType=' + filterType + '&filterValueFrom=' + filterValueFrom + '&filterValueTo=' + filterValueTo;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+        // Popup window for characters (Sweetalert2)
+        $('tbody tr').on('click', function(){
+            var rowCounter = 1;
+            var episode = $(this).data('episode');
+            var characters = $(this).data('characters');
+            var characterData = `
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-nav text-white">
+                            <th>ID</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            characters.forEach(function(character){
+                characterData += `
+                    <tr class=${rowCounter %2 == 0 ? "bg-table-body" : "bg-table-body2"}>
+                        <th class="text-black">${character.id}</th>
+                        <th class="text-black">${character.name}</th>
+                    </tr>
+                `;
+
+                rowCounter++;
+            });
+
+            characterData += `</tbody></table>`;
+
+            Swal.fire({
+                title: "<strong>" + episode + "</strong> character list",
+                icon: "info",
+                html: `
+                    <div class="w-full">
+                        ${characterData}
+                    </div>
+                `,
+                showCloseButton: true,
+                showCancelButton: false,
+                focusConfirm: false,
+                confirmButtonText: `
+                    <i class="fa fa-thumbs-up"></i> OK!
+                `,
+                confirmButtonAriaLabel: "Confirm!",
+                cancelButtonText: `
+                    <i class="fa fa-thumbs-down"></i>
+                `,
+                cancelButtonAriaLabel: "Confirm"
+            });
+        });
+
     </script>
 </body>
 </html>
