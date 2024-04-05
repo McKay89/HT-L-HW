@@ -11,23 +11,29 @@
                 <tr>
                     <th></th>
                     <th>
-                        <input type="text" id="filterByName" class="p-1 text-center" placeholder="Filter by 'Name'">
+                        <input type="text" id="filterByNameInput" class="p-1 text-center" placeholder="Filter by 'Name'">
+                        <button id="filterByNameSubmit" class="bg-button hover:bg-button-hover p-1 px-2 ml-2 transition text-white border border-blue-700 rounded">GO</button>
                     </th>
-                    <th></th>
                     <th></th>
                     <th></th>
                     <th>
-                        <input type="text" id="filterByCreatedFrom" class="w-36 p-1 text-center" placeholder="FROM"> -
-                        <input type="text" id="filterByCreatedTo" class="w-36 p-1 text-center" placeholder="TO">
+                        <input type="text" id="filterByAirFromInput" class="w-24 p-1 text-center" placeholder="FROM"> -
+                        <input type="text" id="filterByAirToInput" class="w-24 p-1 text-center" placeholder="TO">
+                        <button id="filterByAirDateSubmit" class="bg-button hover:bg-button-hover p-1 px-2 ml-2 transition text-white border border-blue-700 rounded">GO</button>
+                    </th>
+                    <th>
+                        <input type="text" id="filterByCreatedFromInput" class="w-24 p-1 text-center" placeholder="FROM"> -
+                        <input type="text" id="filterByCreatedToInput" class="w-24 p-1 text-center" placeholder="TO">
+                        <button id="filterByCreatedDateSubmit" class="bg-button hover:bg-button-hover p-1 px-2 ml-2 transition text-white border border-blue-700 rounded">GO</button>
                     </th>
                 </tr>
                 <tr class="bg-nav text-white">
-                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_id', 'direction' => 'asc']) }}">ID <i class="fa-solid fa-sort"></i></a></th>
-                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_name', 'direction' => 'asc']) }}">Name <i class="fa-solid fa-sort"></i></a></th>
-                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_episode', 'direction' => 'asc']) }}">Episode <i class="fa-solid fa-sort"></i></a></th>
-                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_url', 'direction' => 'asc']) }}">URL <i class="fa-solid fa-sort"></i></a></th>
-                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_air_date', 'direction' => 'asc']) }}">Air Date <i class="fa-solid fa-sort"></i></a></th>
-                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_created', 'direction' => 'asc']) }}">Created <i class="fa-solid fa-sort"></i></a></th>
+                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_id', 'direction' => 'asc']) }}"><span class="hover:underline">ID</span> <i class="fa-solid fa-sort"></i></a></th>
+                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_name', 'direction' => 'asc']) }}"><span class="hover:underline">Name</span> <i class="fa-solid fa-sort"></i></a></th>
+                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_episode', 'direction' => 'asc']) }}"><span class="hover:underline">Episode</span> <i class="fa-solid fa-sort"></i></a></th>
+                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_url', 'direction' => 'asc']) }}"><span class="hover:underline">URL</span> <i class="fa-solid fa-sort"></i></a></th>
+                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_air_date', 'direction' => 'asc']) }}"><span class="hover:underline">Air Date</span> <i class="fa-solid fa-sort"></i></a></th>
+                    <th><a href="{{ route('sorted-episodes', ['column' => 'ep_created', 'direction' => 'asc']) }}"><span class="hover:underline">Created</span> <i class="fa-solid fa-sort"></i></a></th>
                 </tr>
             </thead>
             <tbody>
@@ -37,7 +43,7 @@
                         <td>{{ $episode->ep_name }}</td>
                         <td>{{ $episode->ep_episode }}</td>
                         <td>{{ $episode->ep_url }}</td>
-                        <td>{{ $episode->ep_air_date }}</td>
+                        <td>{{ date('Y-m-d', strtotime($episode->ep_air_date)) }}</td>
                         <td>{{ date('Y-m-d H:i:s', strtotime($episode->ep_created)) }}</td>
                     </tr>
                 @endforeach
@@ -52,7 +58,6 @@
     <div class="w-full flex justify-center mt-20 text-3xl text-center">
         <span>
             No episodes found !<br>
-            Please click on <strong>Download Data</strong> button !
         </span>
     </div>
 @endunless
